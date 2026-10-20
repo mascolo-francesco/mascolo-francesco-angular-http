@@ -1,1 +1,22 @@
-<p>gatti works!</p>
+<h2>Fatti sui gatti</h2>
+
+@if (errore()) {
+  <div class="alert alert-danger">{{ errore() }}</div>
+}
+
+@if (fatto(); as f) {
+  <div class="card mb-3">
+    <div class="card-body">
+      <p class="card-text fs-5">{{ f.fact }}</p>
+      <small class="text-body-secondary">{{ f.length }} caratteri</small>
+    </div>
+  </div>
+}
+
+<button type="button" class="btn btn-primary" (click)="nuovoFatto()" [disabled]="loading()">
+  @if (loading()) {
+    Caricamento...
+  } @else {
+    Nuovo fatto
+  }
+</button>

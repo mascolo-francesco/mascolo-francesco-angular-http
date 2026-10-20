@@ -17,6 +17,8 @@ export class Posts {
   readonly posts = signal<Post[]>([]);
   readonly loading = signal(false);
   readonly errore = signal<string | null>(null);
+  readonly pagina = signal(0);
+  readonly ultimaPagina = 10;
 
   caricaUno(numero: string): void {
     this.inizia();
@@ -31,9 +33,22 @@ export class Posts {
 
   caricaTutti(): void {
     this.inizia();
+    this.pagina.set(0);
     this.postService.getPosts().subscribe({
       next: (dati) => {
         this.posts.set(dati);
+        this.loading.set(false);
+      },
+      error: (err: HttpErrorResponse) => this.gestisciErrore(err),
+    });
+  }
+
+  caricaPagina(numero: number): void {
+    this.inizia();
+    this.postService.getPagina(numero).subscribe({
+      next: (dati) => {
+        this.posts.set(dati);
+        this.pagina.set(numero);
         this.loading.set(false);
       },
       error: (err: HttpErrorResponse) => this.gestisciErrore(err),

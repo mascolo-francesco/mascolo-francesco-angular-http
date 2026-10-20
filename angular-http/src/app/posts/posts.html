@@ -13,6 +13,9 @@
   <div class="col-auto">
     <button type="button" class="btn btn-success" (click)="invia()">Invia un post</button>
   </div>
+  <div class="col-auto">
+    <button type="button" class="btn btn-outline-secondary" (click)="caricaPagina(1)">Post a pagine</button>
+  </div>
 </div>
 
 @if (loading()) {
@@ -28,7 +31,17 @@
 }
 
 @if (posts().length > 0) {
-  <h3 class="h5">Tutti i post: {{ posts().length }}</h3>
+  @if (pagina() > 0) {
+    <div class="d-flex align-items-center gap-2 mb-2">
+      <button type="button" class="btn btn-sm btn-outline-primary" (click)="caricaPagina(pagina() - 1)"
+        [disabled]="pagina() === 1 || loading()">Precedente</button>
+      <span>Pagina {{ pagina() }} di {{ ultimaPagina }}</span>
+      <button type="button" class="btn btn-sm btn-outline-primary" (click)="caricaPagina(pagina() + 1)"
+        [disabled]="pagina() === ultimaPagina || loading()">Successiva</button>
+    </div>
+  } @else {
+    <h3 class="h5">Tutti i post: {{ posts().length }}</h3>
+  }
   <div class="list-group">
     @for (p of posts(); track p.id) {
       <div class="list-group-item">
